@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blazed Odyssey - ALPHA</title>
+  <meta name="description" content="Blazed Odyssey - A 2D pixel MMO currently in ALPHA testing.">
+  <meta property="og:title" content="Blazed Odyssey - ALPHA">
+  <meta property="og:description" content="A 2D pixel MMO currently in ALPHA testing.">
+  <meta property="og:image" content="assets/images/preview.png">
+  <link rel="icon" href="assets/images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="#home" class="brand">Blazed Odyssey <span class="badge">ALPHA</span></a>
+      <ul class="nav-menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#races">Races & Classes</a></li>
+        <li><a href="#updates">Updates</a></li>
+        <li><a href="#account">Create Account</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero background">
+      <div class="overlay">
+        <div class="container hero-inner">
+          <h1>Blazed Odyssey <span class="badge">ALPHA</span></h1>
+          <p>A 2D pixel MMO currently in ALPHA testing.</p>
+          <div class="actions">
+            <a class="btn primary" href="#account">Create Account</a>
+            <a class="btn secondary" href="#updates">Read Updates</a>
+            <a class="btn discord" href="https://discord.gg/5Dncrg2PNn" target="_blank">Join Discord</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="account" class="section">
+      <div class="container narrow">
+        <h2>Create Account</h2>
+        <form id="signupForm" novalidate>
+          <label>Username <input type="text" name="username" required></label>
+          <div class="error" id="usernameError"></div>
+          <label>Email <input type="email" name="email" required></label>
+          <div class="error" id="emailError"></div>
+          <label>Password <input type="password" name="password" required></label>
+          <div class="error" id="passwordError"></div>
+          <label>Confirm Password <input type="password" name="confirm" required></label>
+          <div class="error" id="confirmError"></div>
+          <button type="submit" id="signupBtn" disabled>Create Account</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="races" class="section alt">
+      <div class="container">
+        <h2>Races & Classes</h2>
+        <div class="grid-4">
+          <article class="card"><h3>Human</h3><p>Versatile adventurers, balanced in all aspects.</p><ul><li>Knight</li><li>Priest</li><li>Archer</li></ul></article>
+          <article class="card"><h3>Elf</h3><p>Graceful beings attuned to magic and nature.</p><ul><li>Ranger</li><li>Mage</li></ul></article>
+          <article class="card"><h3>Devil</h3><p>Powerful warriors with dark origins.</p><ul><li>Dark Knight</li><li>Assassin</li></ul></article>
+          <article class="card"><h3>Skeleton</h3><p>Undead fighters risen with cursed power.</p><ul><li>Necromancer</li><li>Bone Knight</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="updates" class="section">
+      <div class="container">
+        <h2>Updates</h2>
+        <div class="news-tile">No release date yet — follow updates here.</div>
+        <div id="updatesList"></div>
+      </div>
+    </section>
+
+    <section id="media" class="section alt">
+      <div class="container">
+        <h2>Screenshots</h2>
+        <div class="grid-3 gallery">
+          <img src="assets/images/placeholder1.png" alt="Screenshot 1" loading="lazy">
+          <img src="assets/images/placeholder2.png" alt="Screenshot 2" loading="lazy">
+          <img src="assets/images/placeholder3.png" alt="Screenshot 3" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container narrow">
+        <h2>Contact</h2>
+        <p>Contact form coming soon.</p>
+        <form><input type="text" placeholder="Your message" disabled><button disabled>Send</button></form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Blazed Odyssey. ALPHA build. All rights reserved.</p>
+      <p>
+        <a href="https://github.com/BlazedONLINE/blazed-2d-mmo-site" target="_blank">GitHub</a> |
+        <a href="https://discord.gg/PLACEHOLDER" target="_blank">Discord</a> |
+        <a href="#">Terms</a> | <a href="#">Privacy</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
