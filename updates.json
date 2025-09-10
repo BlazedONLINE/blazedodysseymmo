@@ -1,27 +1,27 @@
 [
   {
-    "date": "2025-08-12",
-    "title": "Alpha Trailer Cut",
-    "summary": "New action-packed trailer showcasing party combat and dungeon bosses."
+    "date": "2025-09-09",
+    "title": "Powerlist added",
+    "summary": "Top 100 leaderboard with API support and search."
   },
   {
-    "date": "2025-08-10",
-    "title": "UI Polish Pass",
-    "summary": "Modernized the website with a sleek theme and improved accessibility."
+    "date": "2025-09-06",
+    "title": "Trailer modal",
+    "summary": "Watch the new video in a distraction\u2011free modal."
   },
   {
-    "date": "2025-08-07",
-    "title": "Class Balance",
-    "summary": "Tuning early abilities for smoother solo + group play."
+    "date": "2025-09-03",
+    "title": "Visual refresh",
+    "summary": "New dark neon theme, improved readability, mobile nav."
   },
   {
-    "date": "2025-08-04",
-    "title": "Networking Tweaks",
-    "summary": "Latency reductions and animation timing improvements."
+    "date": "2025-08-30",
+    "title": "Signup polish",
+    "summary": "Better validation and clearer errors."
   },
   {
-    "date": "2025-08-01",
-    "title": "Alpha Signups",
-    "summary": "Opening limited testing waves; join Discord for access."
+    "date": "2025-08-24",
+    "title": "Performance tweaks",
+    "summary": "Lighter assets and faster first paint."
   }
 ]
