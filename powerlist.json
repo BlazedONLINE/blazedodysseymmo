@@ -1,0 +1,602 @@
+[
+  {
+    "rank": 1,
+    "name": "Player001",
+    "path": "Druid",
+    "power": 4783
+  },
+  {
+    "rank": 2,
+    "name": "Player002",
+    "path": "Mage",
+    "power": 4293
+  },
+  {
+    "rank": 3,
+    "name": "Player003",
+    "path": "Priest",
+    "power": 1719
+  },
+  {
+    "rank": 4,
+    "name": "Player004",
+    "path": "Warlock",
+    "power": 2460
+  },
+  {
+    "rank": 5,
+    "name": "Player005",
+    "path": "Priest",
+    "power": 3275
+  },
+  {
+    "rank": 6,
+    "name": "Player006",
+    "path": "Paladin",
+    "power": 2878
+  },
+  {
+    "rank": 7,
+    "name": "Player007",
+    "path": "Paladin",
+    "power": 4526
+  },
+  {
+    "rank": 8,
+    "name": "Player008",
+    "path": "Hunter",
+    "power": 3158
+  },
+  {
+    "rank": 9,
+    "name": "Player009",
+    "path": "Berserker",
+    "power": 3052
+  },
+  {
+    "rank": 10,
+    "name": "Player010",
+    "path": "Warrior",
+    "power": 1761
+  },
+  {
+    "rank": 11,
+    "name": "Player011",
+    "path": "Rogue",
+    "power": 4447
+  },
+  {
+    "rank": 12,
+    "name": "Player012",
+    "path": "Priest",
+    "power": 2978
+  },
+  {
+    "rank": 13,
+    "name": "Player013",
+    "path": "Mage",
+    "power": 2543
+  },
+  {
+    "rank": 14,
+    "name": "Player014",
+    "path": "Warrior",
+    "power": 5435
+  },
+  {
+    "rank": 15,
+    "name": "Player015",
+    "path": "Paladin",
+    "power": 2389
+  },
+  {
+    "rank": 16,
+    "name": "Player016",
+    "path": "Hunter",
+    "power": 1639
+  },
+  {
+    "rank": 17,
+    "name": "Player017",
+    "path": "Monk",
+    "power": 1620
+  },
+  {
+    "rank": 18,
+    "name": "Player018",
+    "path": "Priest",
+    "power": 2620
+  },
+  {
+    "rank": 19,
+    "name": "Player019",
+    "path": "Druid",
+    "power": 2471
+  },
+  {
+    "rank": 20,
+    "name": "Player020",
+    "path": "Warrior",
+    "power": 4523
+  },
+  {
+    "rank": 21,
+    "name": "Player021",
+    "path": "Warrior",
+    "power": 1875
+  },
+  {
+    "rank": 22,
+    "name": "Player022",
+    "path": "Monk",
+    "power": 4607
+  },
+  {
+    "rank": 23,
+    "name": "Player023",
+    "path": "Warlock",
+    "power": 4841
+  },
+  {
+    "rank": 24,
+    "name": "Player024",
+    "path": "Druid",
+    "power": 4634
+  },
+  {
+    "rank": 25,
+    "name": "Player025",
+    "path": "Hunter",
+    "power": 4589
+  },
+  {
+    "rank": 26,
+    "name": "Player026",
+    "path": "Paladin",
+    "power": 4798
+  },
+  {
+    "rank": 27,
+    "name": "Player027",
+    "path": "Berserker",
+    "power": 1676
+  },
+  {
+    "rank": 28,
+    "name": "Player028",
+    "path": "Warrior",
+    "power": 4759
+  },
+  {
+    "rank": 29,
+    "name": "Player029",
+    "path": "Mage",
+    "power": 1970
+  },
+  {
+    "rank": 30,
+    "name": "Player030",
+    "path": "Monk",
+    "power": 2981
+  },
+  {
+    "rank": 31,
+    "name": "Player031",
+    "path": "Mage",
+    "power": 3095
+  },
+  {
+    "rank": 32,
+    "name": "Player032",
+    "path": "Priest",
+    "power": 4963
+  },
+  {
+    "rank": 33,
+    "name": "Player033",
+    "path": "Warlock",
+    "power": 4088
+  },
+  {
+    "rank": 34,
+    "name": "Player034",
+    "path": "Hunter",
+    "power": 4685
+  },
+  {
+    "rank": 35,
+    "name": "Player035",
+    "path": "Paladin",
+    "power": 4629
+  },
+  {
+    "rank": 36,
+    "name": "Player036",
+    "path": "Mage",
+    "power": 2994
+  },
+  {
+    "rank": 37,
+    "name": "Player037",
+    "path": "Warlock",
+    "power": 1525
+  },
+  {
+    "rank": 38,
+    "name": "Player038",
+    "path": "Rogue",
+    "power": 2216
+  },
+  {
+    "rank": 39,
+    "name": "Player039",
+    "path": "Monk",
+    "power": 3954
+  },
+  {
+    "rank": 40,
+    "name": "Player040",
+    "path": "Paladin",
+    "power": 4922
+  },
+  {
+    "rank": 41,
+    "name": "Player041",
+    "path": "Warlock",
+    "power": 2453
+  },
+  {
+    "rank": 42,
+    "name": "Player042",
+    "path": "Warlock",
+    "power": 3584
+  },
+  {
+    "rank": 43,
+    "name": "Player043",
+    "path": "Paladin",
+    "power": 2185
+  },
+  {
+    "rank": 44,
+    "name": "Player044",
+    "path": "Priest",
+    "power": 2320
+  },
+  {
+    "rank": 45,
+    "name": "Player045",
+    "path": "Monk",
+    "power": 1790
+  },
+  {
+    "rank": 46,
+    "name": "Player046",
+    "path": "Hunter",
+    "power": 4862
+  },
+  {
+    "rank": 47,
+    "name": "Player047",
+    "path": "Monk",
+    "power": 4658
+  },
+  {
+    "rank": 48,
+    "name": "Player048",
+    "path": "Rogue",
+    "power": 4487
+  },
+  {
+    "rank": 49,
+    "name": "Player049",
+    "path": "Druid",
+    "power": 1868
+  },
+  {
+    "rank": 50,
+    "name": "Player050",
+    "path": "Mage",
+    "power": 4757
+  },
+  {
+    "rank": 51,
+    "name": "Player051",
+    "path": "Mage",
+    "power": 3949
+  },
+  {
+    "rank": 52,
+    "name": "Player052",
+    "path": "Priest",
+    "power": 4822
+  },
+  {
+    "rank": 53,
+    "name": "Player053",
+    "path": "Berserker",
+    "power": 3909
+  },
+  {
+    "rank": 54,
+    "name": "Player054",
+    "path": "Paladin",
+    "power": 1852
+  },
+  {
+    "rank": 55,
+    "name": "Player055",
+    "path": "Rogue",
+    "power": 4331
+  },
+  {
+    "rank": 56,
+    "name": "Player056",
+    "path": "Mage",
+    "power": 4580
+  },
+  {
+    "rank": 57,
+    "name": "Player057",
+    "path": "Warrior",
+    "power": 4840
+  },
+  {
+    "rank": 58,
+    "name": "Player058",
+    "path": "Mage",
+    "power": 4348
+  },
+  {
+    "rank": 59,
+    "name": "Player059",
+    "path": "Rogue",
+    "power": 4271
+  },
+  {
+    "rank": 60,
+    "name": "Player060",
+    "path": "Warlock",
+    "power": 3911
+  },
+  {
+    "rank": 61,
+    "name": "Player061",
+    "path": "Warrior",
+    "power": 5166
+  },
+  {
+    "rank": 62,
+    "name": "Player062",
+    "path": "Warrior",
+    "power": 1552
+  },
+  {
+    "rank": 63,
+    "name": "Player063",
+    "path": "Priest",
+    "power": 4486
+  },
+  {
+    "rank": 64,
+    "name": "Player064",
+    "path": "Mage",
+    "power": 3821
+  },
+  {
+    "rank": 65,
+    "name": "Player065",
+    "path": "Hunter",
+    "power": 3338
+  },
+  {
+    "rank": 66,
+    "name": "Player066",
+    "path": "Rogue",
+    "power": 2798
+  },
+  {
+    "rank": 67,
+    "name": "Player067",
+    "path": "Paladin",
+    "power": 2898
+  },
+  {
+    "rank": 68,
+    "name": "Player068",
+    "path": "Monk",
+    "power": 3587
+  },
+  {
+    "rank": 69,
+    "name": "Player069",
+    "path": "Priest",
+    "power": 4557
+  },
+  {
+    "rank": 70,
+    "name": "Player070",
+    "path": "Warlock",
+    "power": 2890
+  },
+  {
+    "rank": 71,
+    "name": "Player071",
+    "path": "Warlock",
+    "power": 1524
+  },
+  {
+    "rank": 72,
+    "name": "Player072",
+    "path": "Warrior",
+    "power": 2784
+  },
+  {
+    "rank": 73,
+    "name": "Player073",
+    "path": "Druid",
+    "power": 1820
+  },
+  {
+    "rank": 74,
+    "name": "Player074",
+    "path": "Druid",
+    "power": 2246
+  },
+  {
+    "rank": 75,
+    "name": "Player075",
+    "path": "Berserker",
+    "power": 4314
+  },
+  {
+    "rank": 76,
+    "name": "Player076",
+    "path": "Monk",
+    "power": 2557
+  },
+  {
+    "rank": 77,
+    "name": "Player077",
+    "path": "Warlock",
+    "power": 1822
+  },
+  {
+    "rank": 78,
+    "name": "Player078",
+    "path": "Rogue",
+    "power": 3087
+  },
+  {
+    "rank": 79,
+    "name": "Player079",
+    "path": "Paladin",
+    "power": 2761
+  },
+  {
+    "rank": 80,
+    "name": "Player080",
+    "path": "Warlock",
+    "power": 2413
+  },
+  {
+    "rank": 81,
+    "name": "Player081",
+    "path": "Warrior",
+    "power": 2258
+  },
+  {
+    "rank": 82,
+    "name": "Player082",
+    "path": "Rogue",
+    "power": 2564
+  },
+  {
+    "rank": 83,
+    "name": "Player083",
+    "path": "Berserker",
+    "power": 4217
+  },
+  {
+    "rank": 84,
+    "name": "Player084",
+    "path": "Berserker",
+    "power": 1453
+  },
+  {
+    "rank": 85,
+    "name": "Player085",
+    "path": "Hunter",
+    "power": 3122
+  },
+  {
+    "rank": 86,
+    "name": "Player086",
+    "path": "Mage",
+    "power": 4383
+  },
+  {
+    "rank": 87,
+    "name": "Player087",
+    "path": "Rogue",
+    "power": 1985
+  },
+  {
+    "rank": 88,
+    "name": "Player088",
+    "path": "Warrior",
+    "power": 3576
+  },
+  {
+    "rank": 89,
+    "name": "Player089",
+    "path": "Warlock",
+    "power": 4913
+  },
+  {
+    "rank": 90,
+    "name": "Player090",
+    "path": "Monk",
+    "power": 4963
+  },
+  {
+    "rank": 91,
+    "name": "Player091",
+    "path": "Monk",
+    "power": 1398
+  },
+  {
+    "rank": 92,
+    "name": "Player092",
+    "path": "Priest",
+    "power": 4678
+  },
+  {
+    "rank": 93,
+    "name": "Player093",
+    "path": "Berserker",
+    "power": 3309
+  },
+  {
+    "rank": 94,
+    "name": "Player094",
+    "path": "Berserker",
+    "power": 4089
+  },
+  {
+    "rank": 95,
+    "name": "Player095",
+    "path": "Berserker",
+    "power": 3613
+  },
+  {
+    "rank": 96,
+    "name": "Player096",
+    "path": "Berserker",
+    "power": 3392
+  },
+  {
+    "rank": 97,
+    "name": "Player097",
+    "path": "Hunter",
+    "power": 3023
+  },
+  {
+    "rank": 98,
+    "name": "Player098",
+    "path": "Warlock",
+    "power": 4388
+  },
+  {
+    "rank": 99,
+    "name": "Player099",
+    "path": "Hunter",
+    "power": 1551
+  },
+  {
+    "rank": 100,
+    "name": "Player100",
+    "path": "Hunter",
+    "power": 2289
+  }
+]
