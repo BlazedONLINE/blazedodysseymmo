@@ -1,62 +1,82 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Your Account — Blessed TK</title>
-<link rel="stylesheet" href="styles.css">
-</head><body>
-<header class="site-header">…(same nav)…</header>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html" aria-label="Blessed TK home">
+      <img src="assets/images/logo.svg" alt="" width="28" height="28" />
+      <span>Blessed TK</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="powerlist.html">Powerlist</a></li>
+        <li><a href="updates.html">Updates</a></li>
+        <li><a href="create.html">Create Account</a></li>
+        <li><a href="account.html" aria-current="page">Account</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
 <main class="section">
-  <div class="container">
+  <div class="container narrow">
     <h2>Your Account</h2>
 
-    <div id="loginPanel">
-      <form id="loginForm" novalidate>
-        <div class="form-field">
-          <label for="loginEmail">Email</label>
-          <input id="loginEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
-        </div>
-        <div class="form-field">
-          <label for="loginPassword">Password</label>
-          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="••••••" />
-        </div>
-        <div class="error" id="loginError" aria-live="polite"></div>
-        <button id="loginBtn" type="submit">Log In</button>
-      </form>
-    </div>
+    <form id="loginForm" class="card" novalidate>
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
 
-    <div id="accountPanel" hidden>
-      <p id="accountEmail" class="muted"></p>
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="•••••••">
 
+      <button class="btn" type="submit">Log In</button>
+      <div class="muted sm" id="loginHint">Tokens are stored locally only.</div>
+      <div class="error" id="loginError" role="alert" aria-live="polite"></div>
+    </form>
+
+    <section class="card">
       <h3>Your Characters</h3>
-      <div id="charGrid" class="char-grid"></div>
+      <div id="charList" class="char-list muted">Loading…</div>
 
-      <details class="card" id="addCharBox">
+      <details class="mt">
         <summary>Link a character</summary>
-        <form id="addCharForm">
-          <div class="form-field">
-            <label for="charName">Character Name</label>
-            <input id="charName" required />
-          </div>
-          <div class="form-field">
-            <label for="charPass">Character Password</label>
-            <input id="charPass" type="password" required />
-          </div>
-          <button class="btn" type="submit">Link</button>
-          <div class="error" id="addCharError" aria-live="polite"></div>
+        <form id="linkForm" class="mt sm" novalidate>
+          <label for="charName">Character name</label>
+          <input id="charName" name="name" required placeholder="Exact in-game name">
+
+          <label for="charPassword">Character password</label>
+          <input id="charPassword" name="password" type="password" required placeholder="Character password">
+
+          <button class="btn sm" type="submit">Link</button>
+          <div class="error" id="linkError" role="alert" aria-live="polite"></div>
         </form>
       </details>
-    </div>
+    </section>
   </div>
 </main>
 
-<footer class="site-footer">…</footer>
-<div id="toast" class="toast" hidden></div>
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <nav class="footer-nav">
+      <a href="#" target="_blank" id="githubLink" rel="noopener">GitHub</a>
+      <a href="#" id="termsLink">Terms</a>
+      <a href="#" id="privacyLink">Privacy</a>
+      <a href="#" id="discordLink" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</footer>
 
 <script src="config.js"></script>
 <script src="account.js"></script>
-<script>
-  // visually mark nav item
-  const link = document.querySelector('a[data-nav="account"]');
-  if (link) link.classList.add('active');
-</script>
-</body></html>
+<script src="app.js"></script>
+</body>
+</html>
