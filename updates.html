@@ -1,8 +1,51 @@
-<section class="section" id="updates">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Updates — Blessed TK</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html" aria-label="Blessed TK home">
+      <img src="assets/images/logo.svg" alt="" width="28" height="28" />
+      <span>Blessed TK</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="powerlist.html">Powerlist</a></li>
+        <li><a href="updates.html" aria-current="page">Updates</a></li>
+        <li><a href="create.html">Create Account</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="section" id="updates">
   <div class="container">
     <h2>Updates</h2>
     <div id="updatesList" class="updates-list" aria-live="polite"></div>
   </div>
-</section>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <nav class="footer-nav">
+      <a href="#" target="_blank" id="githubLink" rel="noopener">GitHub</a>
+      <a href="#" id="termsLink">Terms</a>
+      <a href="#" id="privacyLink">Privacy</a>
+      <a href="#" id="discordLink" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</footer>
+
 <script src="config.js"></script>
 <script src="app.js"></script>
+</body>
+</html>
