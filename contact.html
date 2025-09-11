@@ -1,28 +1,52 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Contact — Blessed TK</title>
-<link rel="stylesheet" href="styles.css">
-</head><body>
-<header class="site-header">…</header>
-<main class="section"><div class="container narrow">
-  <h2>Contact</h2>
-  <form id="contactForm">
-    <div class="form-field">
-      <label for="cEmail">Email</label>
-      <input id="cEmail" type="email" required placeholder="you@example.com">
-    </div>
-    <div class="form-field">
-      <label for="cMsg">Message</label>
-      <textarea id="cMsg" rows="5" required></textarea>
-    </div>
-    <button type="submit" class="btn">Send</button>
-  </form>
-</div></main>
-<footer class="site-footer">…</footer>
-<script>
-  document.getElementById('contactForm').addEventListener('submit', (e)=>{
-    e.preventDefault();
-    alert('Thanks! Contact endpoint coming soon.');
-  });
-</script>
-</body></html>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html" aria-label="Blessed TK home">
+      <img src="assets/images/logo.svg" alt="" width="28" height="28" />
+      <span>Blessed TK</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="powerlist.html">Powerlist</a></li>
+        <li><a href="updates.html">Updates</a></li>
+        <li><a href="create.html">Create Account</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container narrow">
+    <h2>Contact</h2>
+    <p>Community hub is on Discord.</p>
+    <p><a class="btn discord" id="discordBtn" target="_blank" rel="noopener">Join the Discord</a></p>
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <nav class="footer-nav">
+      <a href="#" target="_blank" id="githubLink" rel="noopener">GitHub</a>
+      <a href="#" id="termsLink">Terms</a>
+      <a href="#" id="privacyLink">Privacy</a>
+      <a href="#" id="discordLink" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
