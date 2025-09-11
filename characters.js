@@ -1,16 +1,10 @@
-// characters.js
-const API = 'https://api.blessedtk.com';
-
-async function loadSlots() {
-  const token = localStorage.getItem('btk_token');
-  const r = await fetch(`${API}/characters`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+// Small helper used by account.js; can be extended later.
+export async function loadSlots(API, token) {
+  const r = await fetch(`${API}/characters`, { headers: { Authorization: `Bearer ${token}` } });
   return r.json(); // { ok:true, slots:[...] }
 }
 
-async function registerCharacter(name, password) {
-  const token = localStorage.getItem('btk_token');
+export async function registerCharacter(API, token, name, password) {
   const r = await fetch(`${API}/characters/register`, {
     method: 'POST',
     headers: {
