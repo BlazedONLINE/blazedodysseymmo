@@ -1,71 +1,62 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blessed TK — Account</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html#home">Blessed TK</a>
-      <nav class="nav">
-        <ul class="nav-menu">
-          <li><a href="index.html#home">Home</a></li>
-          <li><a href="index.html#powerlist">Powerlist</a></li>
-          <li><a href="index.html#updates">Updates</a></li>
-          <li><a href="index.html#account">Create Account</a></li>
-          <li><a href="account.html">Account</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Account — Blessed TK</title>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+<header class="site-header">…(same nav)…</header>
 
-  <main class="section">
-    <div class="container narrow">
-      <h1>Your Account</h1>
+<main class="section">
+  <div class="container">
+    <h2>Your Account</h2>
 
-      <!-- Visible only when NOT logged in -->
-      <section id="authGate">
-        <p class="muted">Log in to manage your characters.</p>
-        <form id="loginForm" class="card" novalidate>
-          <label>Email</label>
-          <input id="loginEmail" type="email" required placeholder="you@example.com" />
-          <label>Password</label>
-          <input id="loginPass" type="password" required placeholder="••••••••" />
-          <button class="btn primary" type="submit">Log in</button>
-          <div id="loginMsg" class="error" aria-live="polite"></div>
-        </form>
-      </section>
-
-      <!-- Visible only when logged in -->
-      <section id="accountPanel" hidden>
-        <div class="toolbar">
-          <button id="logoutBtn" class="btn ghost sm">Log out</button>
+    <div id="loginPanel">
+      <form id="loginForm" novalidate>
+        <div class="form-field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
         </div>
-
-        <h2>Linked Characters</h2>
-        <div id="charGrid" class="grid-3 gap"></div>
-
-        <h3>Add a Character</h3>
-        <form id="linkForm" class="card" novalidate>
-          <label>Character Name</label>
-          <input id="charName" type="text" required />
-
-          <label>Character Password</label>
-          <input id="charPass" type="password" required />
-
-          <button class="btn primary" type="submit">Link Character</button>
-          <div id="linkMsg" class="error" aria-live="polite"></div>
-        </form>
-      </section>
+        <div class="form-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="••••••" />
+        </div>
+        <div class="error" id="loginError" aria-live="polite"></div>
+        <button id="loginBtn" type="submit">Log In</button>
+      </form>
     </div>
-  </main>
 
-  <div id="toast" class="toast" hidden></div>
+    <div id="accountPanel" hidden>
+      <p id="accountEmail" class="muted"></p>
 
-  <script src="config.js"></script>
-  <script src="account.js"></script>
-</body>
-</html>
+      <h3>Your Characters</h3>
+      <div id="charGrid" class="char-grid"></div>
+
+      <details class="card" id="addCharBox">
+        <summary>Link a character</summary>
+        <form id="addCharForm">
+          <div class="form-field">
+            <label for="charName">Character Name</label>
+            <input id="charName" required />
+          </div>
+          <div class="form-field">
+            <label for="charPass">Character Password</label>
+            <input id="charPass" type="password" required />
+          </div>
+          <button class="btn" type="submit">Link</button>
+          <div class="error" id="addCharError" aria-live="polite"></div>
+        </form>
+      </details>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">…</footer>
+<div id="toast" class="toast" hidden></div>
+
+<script src="config.js"></script>
+<script src="account.js"></script>
+<script>
+  // visually mark nav item
+  const link = document.querySelector('a[data-nav="account"]');
+  if (link) link.classList.add('active');
+</script>
+</body></html>
