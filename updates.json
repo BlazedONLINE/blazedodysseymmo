@@ -1,27 +1,4 @@
 [
-  {
-    "date": "2025-09-09",
-    "title": "Powerlist added",
-    "summary": "Top 100 leaderboard with API support and search."
-  },
-  {
-    "date": "2025-09-06",
-    "title": "Trailer modal",
-    "summary": "Watch the new video in a distraction\u2011free modal."
-  },
-  {
-    "date": "2025-09-03",
-    "title": "Visual refresh",
-    "summary": "New dark neon theme, improved readability, mobile nav."
-  },
-  {
-    "date": "2025-08-30",
-    "title": "Signup polish",
-    "summary": "Better validation and clearer errors."
-  },
-  {
-    "date": "2025-08-24",
-    "title": "Performance tweaks",
-    "summary": "Lighter assets and faster first paint."
-  }
+  { "date": "2025-09-01", "title": "Alpha Roadmap", "body": "Classes rebalancing, PvP arenas, and housing preview." },
+  { "date": "2025-08-20", "title": "Server Move", "body": "Upgraded to a new droplet for more headroom." }
 ]
