@@ -1,101 +1,182 @@
 (() => {
-  const API = (window.BTK_CONFIG||{}).API_BASE_URL || "";
-  const charList = document.getElementById('charList');
-  const linkForm = document.getElementById('linkForm');
-  const linkError = document.getElementById('linkError');
-  const tokenError = document.getElementById('tokenError');
-  const logoutBtn = document.getElementById('logoutBtn');
+  const CFG = window.BTK_CONFIG || {};
+  const API = CFG.API_BASE_URL || "";
+  const $ = (id) => document.getElementById(id);
 
-  const getToken = () => localStorage.getItem('btk_token') || "";
-  const clearToken = () => localStorage.removeItem('btk_token');
+  const grid = $("charGrid");
+  const toast = $("toast");
 
-  // Guard: if no token, go back to login page
-  const token = getToken();
-  if (!token) {
-    tokenError.hidden = false;
-    tokenError.textContent = 'Not logged in. Redirecting to account…';
-    setTimeout(() => (window.location.href = 'account.html'), 800);
+  function getToken() {
+    return localStorage.getItem("btk_token") || "";
+  }
+  function say(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.hidden = false;
+    clearTimeout(say._t);
+    say._t = setTimeout(() => (toast.hidden = true), 2500);
   }
 
-  logoutBtn?.addEventListener('click', () => {
-    clearToken();
-    window.location.href = 'account.html';
-  });
+  // Redirect to login if no token
+  const TOKEN = getToken();
+  if (!TOKEN) {
+    location.href = "account.html?next=characters.html";
+    return;
+  }
+  if (!API) {
+    say("API not configured (check config.js)");
+    return;
+  }
 
-  async function api(url, opts={}) {
+  // --- API helpers -----------------------------------------------------------
+  async function api(path, opts = {}) {
     try {
-      const r = await fetch(url, opts);
-      const ct = r.headers.get('content-type')||'';
-      const body = ct.includes('json') ? await r.json() : await r.text();
-      return { ok:r.ok, status:r.status, data: body };
-    } catch(e) {
-      return { ok:false, status:0, data:{ error: e.message || 'Network error' } };
+      const r = await fetch(`${API}${path}`, {
+        ...opts,
+        headers: {
+          ...(opts.headers || {}),
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      });
+      const ct = r.headers.get("content-type") || "";
+      const data = ct.includes("application/json") ? await r.json() : await r.text();
+      return { ok: r.ok, status: r.status, data };
+    } catch (e) {
+      return { ok: false, status: 0, data: { error: e?.message || "Network error" } };
     }
-  }
-
-  async function getSlots() {
-    const res = await api(`${API}/characters`, { headers: { Authorization: `Bearer ${getToken()}` } });
-    if (!res.ok) throw new Error(res.data?.error || `HTTP ${res.status}`);
-    return res.data.slots || [];
   }
 
   async function lookupChar(id) {
-    const res = await api(`${API}/characters/lookup?id=${encodeURIComponent(id)}`);
-    return res.ok ? res.data : null;
-  }
-
-  function pathNameFromId(id) {
-    const map = {1:'Rogue',2:'Mage',3:'Priest',4:'Poet',5:'Warrior',6:'GM'};
-    return map[id] || (id ? `Path ${id}` : 'Unknown');
-  }
-
-  function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));}
-
-  async function render() {
-    charList.textContent = 'Loading…';
+    // public lookup, no auth header required
     try {
-      const ids = (await getSlots()).filter(x => Number(x) > 0);
-      if (!ids.length) { charList.innerHTML = '<div class="muted">No characters linked yet.</div>'; return; }
-
-      const details = await Promise.all(ids.map(id => lookupChar(id).catch(()=>null)));
-      const html = ids.map((id,i) => {
-        const d = details[i];
-        const name = d?.name ?? `#${id}`;
-        const level = d?.level ?? '—';
-        const path = d?.pathName ?? pathNameFromId(d?.pathId);
-        return `
-          <div class="char-card">
-            <div><strong>${escapeHtml(name)}</strong></div>
-            <div class="muted">Level ${escapeHtml(level)} — ${escapeHtml(path)}</div>
-          </div>`;
-      }).join('');
-      charList.innerHTML = html;
-    } catch(e) {
-      charList.innerHTML = `<div class="error">Failed to load: ${escapeHtml(e.message||'Unknown')}</div>`;
-      console.error(e);
+      const r = await fetch(`${API}/characters/lookup?id=${encodeURIComponent(id)}`);
+      const data = await r.json();
+      return data && data.ok ? data : null;
+    } catch {
+      return null;
     }
   }
 
-  linkForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    linkError.textContent = '';
-    const name = (document.getElementById('charName').value||'').trim();
-    const pass = document.getElementById('charPassword').value||'';
-    if (!name || !pass) { linkError.textContent = 'Enter name and password.'; return; }
+  // --- Render helpers --------------------------------------------------------
+  function slotCardSkeleton(index) {
+    const div = document.createElement("div");
+    div.className = "card char-card";
+    div.innerHTML = `
+      <div class="char-head">
+        <div class="char-slot">Slot ${index + 1}</div>
+        <div class="char-name muted">Loading…</div>
+      </div>
+      <div class="char-meta muted sm">Please wait</div>
+    `;
+    return div;
+  }
 
-    const res = await api(`${API}/characters/register`, {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json', Authorization: `Bearer ${getToken()}` },
-      body: JSON.stringify({ name, password: pass })
+  function filledCard(index, detail) {
+    const div = document.createElement("div");
+    div.className = "card char-card";
+    div.innerHTML = `
+      <div class="char-head">
+        <div class="char-slot">Slot ${index + 1}</div>
+        <div class="char-name">${detail.name}</div>
+      </div>
+      <div class="char-meta">
+        <span class="pill">Level ${detail.level}</span>
+        <span class="pill">${detail.pathName || `Path ${detail.pathId ?? "?"}`}</span>
+        <span class="pill id">ID ${detail.id}</span>
+      </div>
+    `;
+    return div;
+  }
+
+  function emptyCard(index) {
+    const div = document.createElement("div");
+    div.className = "card char-card empty";
+    const formId = `linkForm_${index}`;
+    div.innerHTML = `
+      <div class="char-head">
+        <div class="char-slot">Slot ${index + 1}</div>
+        <div class="char-name muted">Empty slot</div>
+      </div>
+
+      <details class="linker">
+        <summary>Link a character</summary>
+        <form id="${formId}" class="inline-form">
+          <label>
+            <span class="sr-only">Character name</span>
+            <input name="name" type="text" placeholder="Character name" required />
+          </label>
+          <label>
+            <span class="sr-only">Character password</span>
+            <input name="password" type="password" placeholder="Character password" required />
+          </label>
+          <button type="submit" class="btn sm">Link</button>
+          <div class="err sm" aria-live="polite"></div>
+        </form>
+      </details>
+    `;
+
+    // attach submit handler
+    const form = div.querySelector(`#${CSS.escape(formId)}`);
+    const errBox = form.querySelector(".err");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errBox.textContent = "";
+      const fd = new FormData(form);
+      const payload = {
+        name: (fd.get("name") || "").toString().trim(),
+        password: (fd.get("password") || "").toString(),
+      };
+      if (!payload.name || !payload.password) {
+        errBox.textContent = "Enter name & password.";
+        return;
+      }
+      const res = await api("/characters/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok || !res.data || res.data.ok === false) {
+        errBox.textContent =
+          (res.data && res.data.error) || `Failed (HTTP ${res.status || "?"})`;
+        return;
+      }
+      say("Character linked!");
+      await loadAndRender(); // refresh all slots
     });
 
-    if (!res.data?.ok) {
-      linkError.textContent = res.data?.error || `Link failed (HTTP ${res.status})`;
+    return div;
+  }
+
+  // --- Main loader -----------------------------------------------------------
+  async function loadAndRender() {
+    grid.innerHTML = "";
+    // skeletons first
+    for (let i = 0; i < 6; i++) grid.appendChild(slotCardSkeleton(i));
+
+    const res = await api("/characters");
+    if (!res.ok || !res.data || res.data.ok === false || !Array.isArray(res.data.slots)) {
+      grid.innerHTML = `<div class="muted">Failed to load characters.</div>`;
       return;
     }
-    (e.target.reset && e.target.reset());
-    render();
-  });
 
-  render();
+    const ids = res.data.slots.slice(0, 6);
+    // fetch details for filled slots in parallel
+    const detailPromises = ids.map((id) => (id ? lookupChar(id) : Promise.resolve(null)));
+    const details = await Promise.all(detailPromises);
+
+    // render final
+    grid.innerHTML = "";
+    for (let i = 0; i < 6; i++) {
+      const id = ids[i] || 0;
+      const det = details[i];
+      if (id > 0 && det) {
+        grid.appendChild(filledCard(i, det));
+      } else {
+        grid.appendChild(emptyCard(i));
+      }
+    }
+  }
+
+  // kick off
+  loadAndRender();
 })();
