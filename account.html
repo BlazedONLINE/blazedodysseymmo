@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blessed TK — Account</title>
+  <meta name="description" content="Manage your Blessed TK account and linked characters." />
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap"></noscript>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" role="banner">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html#home" aria-label="Blessed TK home">
+        <img src="assets/images/logo.svg" alt="" width="28" height="28" />
+        <span>Blessed TK</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="index.html#powerlist">Powerlist</a></li>
+          <li><a href="index.html#updates">Updates</a></li>
+          <li><a href="index.html#account">Create Account</a></li>
+          <li><a href="account.html" aria-current="page">Account</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="section">
+    <div class="container narrow">
+      <h1>Your Account</h1>
+
+      <!-- LOGIN PANEL (shown when not logged in) -->
+      <section id="loginPanel" class="card" hidden>
+        <h2>Log In</h2>
+        <form id="loginForm" novalidate>
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com" />
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="••••••••" />
+          <button type="submit" class="btn primary" id="loginBtn">Log In</button>
+          <p class="muted sm">Don’t have an account? <a href="index.html#account">Create one</a>.</p>
+          <div class="error" id="loginError" role="alert" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <!-- ACCOUNT PANEL (shown when logged in) -->
+      <section id="accountPanel" class="card" hidden>
+        <header class="split">
+          <h2>Linked Characters</h2>
+          <div>
+            <button class="btn ghost sm" id="refreshBtn" title="Refresh">Refresh</button>
+            <button class="btn sm" id="logoutBtn" title="Log out">Log out</button>
+          </div>
+        </header>
+
+        <!-- Current slots -->
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>#</th><th>Character ID</th></tr>
+            </thead>
+            <tbody id="slotBody">
+              <!-- filled by account.js -->
+            </tbody>
+          </table>
+          <p class="muted sm">You can link up to 6 characters. Characters must already exist (created in the Blessed TK client) and you must provide the character’s in-game password to link.</p>
+        </div>
+
+        <!-- Link a character -->
+        <h3>Link a Character</h3>
+        <form id="linkForm" class="stack sm" novalidate>
+          <div class="grid two">
+            <div>
+              <label for="charName">Character Name</label>
+              <input id="charName" type="text" required placeholder="e.g., KnightJoe" />
+            </div>
+            <div>
+              <label for="charPass">Character Password</label>
+              <input id="charPass" type="password" required placeholder="in-game password" />
+            </div>
+          </div>
+          <button type="submit" class="btn primary" id="linkBtn">Link Character</button>
+          <div class="error" id="linkError" role="alert" aria-live="polite"></div>
+          <div class="ok" id="linkOk" role="status" aria-live="polite"></div>
+        </form>
+
+        <!-- Unlink a character -->
+        <h3>Unlink a Character</h3>
+        <form id="unlinkForm" class="stack sm" novalidate>
+          <label for="unlinkId">Character ID to remove</label>
+          <input id="unlinkId" type="number" min="1" step="1" placeholder="e.g., 2716" />
+          <button type="submit" class="btn ghost" id="unlinkBtn">Unlink</button>
+          <div class="error" id="unlinkError" role="alert" aria-live="polite"></div>
+          <div class="ok" id="unlinkOk" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite" class="toast" hidden></div>
+
+  <!-- Config + page script -->
+  <script src="config.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>
