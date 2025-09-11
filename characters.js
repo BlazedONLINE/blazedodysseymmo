@@ -1,64 +1,101 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your Characters — Blessed TK</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html"><img src="assets/images/logo.svg" alt="" width="28" height="28" /> <span>Blessed TK</span></a>
-      <nav class="nav">
-        <ul class="nav-menu" id="navMenu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="powerlist.html">Powerlist</a></li>
-          <li><a href="updates.html">Updates</a></li>
-          <li><a href="create.html">Create Account</a></li>
-          <li><a href="account.html">Account</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+(() => {
+  const API = (window.BTK_CONFIG||{}).API_BASE_URL || "";
+  const charList = document.getElementById('charList');
+  const linkForm = document.getElementById('linkForm');
+  const linkError = document.getElementById('linkError');
+  const tokenError = document.getElementById('tokenError');
+  const logoutBtn = document.getElementById('logoutBtn');
 
-  <main class="section">
-    <div class="container narrow">
-      <h2>Your Characters <button id="logoutBtn" class="btn ghost sm" style="margin-left:1rem">Log out</button></h2>
+  const getToken = () => localStorage.getItem('btk_token') || "";
+  const clearToken = () => localStorage.removeItem('btk_token');
 
-      <section class="card">
-        <h3 class="muted">Linked Characters</h3>
-        <div id="charList">Loading…</div>
-      </section>
+  // Guard: if no token, go back to login page
+  const token = getToken();
+  if (!token) {
+    tokenError.hidden = false;
+    tokenError.textContent = 'Not logged in. Redirecting to account…';
+    setTimeout(() => (window.location.href = 'account.html'), 800);
+  }
 
-      <details class="card" style="margin-top:1rem">
-        <summary>Link a character</summary>
-        <form id="linkForm">
-          <label for="charName">Character Name</label>
-          <input id="charName" type="text" required />
-          <label for="charPassword">Character Password</label>
-          <input id="charPassword" type="password" required />
-          <button class="btn" type="submit">Link</button>
-          <div id="linkError" class="error" role="alert" aria-live="polite"></div>
-        </form>
-      </details>
+  logoutBtn?.addEventListener('click', () => {
+    clearToken();
+    window.location.href = 'account.html';
+  });
 
-      <div id="tokenError" class="error" style="margin-top:1rem" hidden></div>
-    </div>
-  </main>
+  async function api(url, opts={}) {
+    try {
+      const r = await fetch(url, opts);
+      const ct = r.headers.get('content-type')||'';
+      const body = ct.includes('json') ? await r.json() : await r.text();
+      return { ok:r.ok, status:r.status, data: body };
+    } catch(e) {
+      return { ok:false, status:0, data:{ error: e.message || 'Network error' } };
+    }
+  }
 
-  <footer class="site-footer"><div class="container">
-    <nav class="footer-nav">
-      <a id="githubLink" target="_blank" rel="noopener">GitHub</a>
-      <a id="termsLink">Terms</a>
-      <a id="privacyLink">Privacy</a>
-      <a id="discordLink" target="_blank" rel="noopener">Discord</a>
-    </nav>
-    <p class="footnote">© 2025 Blessed TK</p>
-  </div></footer>
+  async function getSlots() {
+    const res = await api(`${API}/characters`, { headers: { Authorization: `Bearer ${getToken()}` } });
+    if (!res.ok) throw new Error(res.data?.error || `HTTP ${res.status}`);
+    return res.data.slots || [];
+  }
 
-  <script src="config.js"></script>
-  <script src="characters.js"></script>
-</body>
-</html>
+  async function lookupChar(id) {
+    const res = await api(`${API}/characters/lookup?id=${encodeURIComponent(id)}`);
+    return res.ok ? res.data : null;
+  }
+
+  function pathNameFromId(id) {
+    const map = {1:'Rogue',2:'Mage',3:'Priest',4:'Poet',5:'Warrior',6:'GM'};
+    return map[id] || (id ? `Path ${id}` : 'Unknown');
+  }
+
+  function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));}
+
+  async function render() {
+    charList.textContent = 'Loading…';
+    try {
+      const ids = (await getSlots()).filter(x => Number(x) > 0);
+      if (!ids.length) { charList.innerHTML = '<div class="muted">No characters linked yet.</div>'; return; }
+
+      const details = await Promise.all(ids.map(id => lookupChar(id).catch(()=>null)));
+      const html = ids.map((id,i) => {
+        const d = details[i];
+        const name = d?.name ?? `#${id}`;
+        const level = d?.level ?? '—';
+        const path = d?.pathName ?? pathNameFromId(d?.pathId);
+        return `
+          <div class="char-card">
+            <div><strong>${escapeHtml(name)}</strong></div>
+            <div class="muted">Level ${escapeHtml(level)} — ${escapeHtml(path)}</div>
+          </div>`;
+      }).join('');
+      charList.innerHTML = html;
+    } catch(e) {
+      charList.innerHTML = `<div class="error">Failed to load: ${escapeHtml(e.message||'Unknown')}</div>`;
+      console.error(e);
+    }
+  }
+
+  linkForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    linkError.textContent = '';
+    const name = (document.getElementById('charName').value||'').trim();
+    const pass = document.getElementById('charPassword').value||'';
+    if (!name || !pass) { linkError.textContent = 'Enter name and password.'; return; }
+
+    const res = await api(`${API}/characters/register`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', Authorization: `Bearer ${getToken()}` },
+      body: JSON.stringify({ name, password: pass })
+    });
+
+    if (!res.data?.ok) {
+      linkError.textContent = res.data?.error || `Link failed (HTTP ${res.status})`;
+      return;
+    }
+    (e.target.reset && e.target.reset());
+    render();
+  });
+
+  render();
+})();
