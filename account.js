@@ -1,179 +1,198 @@
-// account.js
+// website/account.js
 
-const API_BASE = (window.BTK_CONFIG && window.BTK_CONFIG.API_BASE_URL) || 'https://api.blessedtk.com';
+/* ====== tiny utils ====== */
+const $  = (id) => document.getElementById(id);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-function getToken() {
-  return localStorage.getItem('btk_token') || '';
+const CFG = (window.BTK_CONFIG && window.BTK_CONFIG.API_BASE_URL) || 'https://api.blessedtk.com';
+const TOKEN_KEY = 'btk_token';
+
+function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+function setToken(t) { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); }
+
+function toast(msg, ms = 3000) {
+  const el = $('toast');
+  if (!el) return alert(msg);
+  el.textContent = msg;
+  el.hidden = false;
+  setTimeout(() => (el.hidden = true), ms);
 }
 
-function setToken(t) {
-  if (t) localStorage.setItem('btk_token', t);
+async function api(path, { method = 'GET', headers = {}, body } = {}) {
+  const token = getToken();
+  const h = { ...headers };
+  if (!('Content-Type' in h) && body != null && typeof body !== 'string') {
+    h['Content-Type'] = 'application/json';
+  }
+  if (token) h.Authorization = `Bearer ${token}`;
+
+  const res = await fetch(`${CFG}${path}`, {
+    method,
+    headers: h,
+    body: body && typeof body !== 'string' ? JSON.stringify(body) : body,
+    credentials: 'omit',
+  });
+  let data = null;
+  try { data = await res.json(); } catch { /* leave null */ }
+  return data || { ok: false, error: `HTTP ${res.status}` };
 }
 
-function clearToken() {
-  localStorage.removeItem('btk_token');
-}
-
-async function api(path, opts = {}) {
-  const headers = Object.assign(
-    { 'Content-Type': 'application/json' },
-    (getToken() ? { Authorization: `Bearer ${getToken()}` } : {})
-  );
-  const res = await fetch(`${API_BASE}${path}`, { ...opts, headers });
-  const data = await res.json().catch(() => ({}));
-  return data;
-}
-
-function $(id) {
-  return document.getElementById(id);
-}
-
-function setHidden(el, hidden) {
-  if (!el) return;
-  el.hidden = !!hidden;
-}
-
-function showLogin() {
-  setHidden($('loginPanel'), false);
-  setHidden($('accountPanel'), true);
-}
-
-function showAccount() {
-  setHidden($('loginPanel'), true);
-  setHidden($('accountPanel'), false);
-}
-
-function renderSlots(slots = []) {
+/* ====== rendering ====== */
+function renderSlotsRich(slots = [], details = []) {
   const body = $('slotBody');
+  if (!body) return;
+  const byId = new Map(details.map(d => [Number(d.id), d]));
+
   body.innerHTML = '';
-  slots.forEach((id, idx) => {
+  slots.forEach((cid, idx) => {
+    const d = cid ? byId.get(Number(cid)) : null;
+
     const tr = document.createElement('tr');
-    const tdIdx = document.createElement('td');
-    const tdId  = document.createElement('td');
-    tdIdx.textContent = (idx + 1).toString();
-    tdId.textContent  = id ? id : '—';
-    tr.appendChild(tdIdx);
+
+    const tdSlot  = document.createElement('td');
+    const tdName  = document.createElement('td');
+    const tdPath  = document.createElement('td');
+    const tdLevel = document.createElement('td');
+    const tdId    = document.createElement('td');
+
+    tdSlot.textContent  = String(idx + 1);
+    tdName.textContent  = d ? (d.name || '—') : '—';
+    tdPath.textContent  = d ? (d.pathName || (d.pathId ? `Path ${d.pathId}` : '—')) : '—';
+    tdLevel.textContent = d ? String(d.level ?? 0) : '—';
+    tdId.textContent    = cid ? String(cid) : '—';
+
+    tr.appendChild(tdSlot);
+    tr.appendChild(tdName);
+    tr.appendChild(tdPath);
+    tr.appendChild(tdLevel);
     tr.appendChild(tdId);
+
     body.appendChild(tr);
   });
 }
 
 async function refreshSlots() {
-  const r = await api('/characters');
+  // Prefer rich endpoint
+  let r = await api('/characters/details');
   if (r && r.ok) {
-    renderSlots(r.slots || []);
+    renderSlotsRich(r.slots || [], r.details || []);
+    return;
+  }
+  // Fallback (IDs only)
+  r = await api('/characters');
+  if (r && r.ok) {
+    renderSlotsRich(r.slots || [], []);
   } else {
-    renderSlots([]);
-    toast(r.error || 'Failed to load characters.');
+    renderSlotsRich([], []);
+    toast((r && r.error) || 'Failed to load characters.');
   }
 }
 
-function toast(msg, ok = false) {
-  const t = $('toast');
-  if (!t) return;
-  t.textContent = msg;
-  t.classList.remove('error');
-  if (ok) t.classList.add('ok'); else t.classList.remove('ok');
-  t.hidden = false;
-  setTimeout(() => (t.hidden = true), 3000);
-}
+/* ====== link / unlink actions ====== */
+async function handleLinkSubmit(e) {
+  e.preventDefault();
+  const name = ($('linkName') || {}).value?.trim();
+  const pass = ($('linkPassword') || {}).value || '';
 
-// --- Event wiring ---
-window.addEventListener('DOMContentLoaded', () => {
-  const token = getToken();
-  if (token) {
-    showAccount();
+  if (!name || !pass) {
+    toast('Enter character name and password.');
+    return;
+  }
+
+  const r = await api('/characters/register', {
+    method: 'POST',
+    body: { name, password: pass },
+  });
+
+  if (r && r.ok) {
+    toast('Character linked!');
+    ( $('linkName') && ($('linkName').value = '') );
+    ( $('linkPassword') && ($('linkPassword').value = '') );
     refreshSlots();
   } else {
-    showLogin();
+    toast((r && r.error) || 'Failed to link character.');
+  }
+}
+
+async function handleUnlinkSubmit(e) {
+  e.preventDefault();
+  const idStr = ($('unlinkId') || {}).value?.trim();
+  const id = Number(idStr);
+  if (!id || Number.isNaN(id)) {
+    toast('Enter a valid character ID to unlink.');
+    return;
   }
 
-  // Login
-  $('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    $('loginError').textContent = '';
-    const email = $('loginEmail').value.trim().toLowerCase();
-    const password = $('loginPassword').value;
-
-    const r = await api('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
-    });
-
-    if (r && r.ok && r.token) {
-      setToken(r.token);
-      $('loginPassword').value = '';
-      showAccount();
-      refreshSlots();
-      toast('Logged in!', true);
-    } else {
-      $('loginError').textContent = r.error || 'Login failed.';
-    }
+  const r = await api('/characters/unlink', {
+    method: 'POST',
+    body: { id },
   });
 
-  // Logout
-  $('logoutBtn').addEventListener('click', () => {
-    clearToken();
-    showLogin();
-    toast('Logged out', true);
-  });
+  if (r && r.ok) {
+    toast('Character unlinked.');
+    ($('unlinkId') && ($('unlinkId').value = ''));
+    refreshSlots();
+  } else {
+    toast((r && r.error) || 'Failed to unlink character.');
+  }
+}
 
-  // Refresh
-  $('refreshBtn').addEventListener('click', refreshSlots);
+/* ====== auth gate ====== */
+function checkAuthAndWireUI() {
+  const token = getToken();
+  const needLogin = !token;
 
-  // Link character
-  $('linkForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    $('linkError').textContent = '';
-    $('linkOk').textContent = '';
+  // Optional: show account email from JWT
+  const emailEl = $('acctEmail');
+  if (emailEl) {
+    let email = '';
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        email = payload.email || '';
+      }
+    } catch {}
+    emailEl.textContent = email;
+  }
 
-    const name = $('charName').value.trim();
-    const password = $('charPass').value;
+  // Toggle UI areas (if your HTML has them)
+  const gated = $$('#authGate');
+  gated.forEach(el => el.hidden = needLogin);
 
-    if (!name || !password) {
-      $('linkError').textContent = 'Character name and password are required.';
-      return;
-    }
+  const loginMsg = $('loginReminder');
+  if (loginMsg) loginMsg.hidden = !needLogin;
 
-    const r = await api('/characters/register', {
-      method: 'POST',
-      body: JSON.stringify({ name, password })
-    });
+  // Wire forms only when authed
+  const linkForm = $('linkForm');
+  const unlinkForm = $('unlinkForm');
 
-    if (r && r.ok) {
-      $('linkOk').textContent = 'Character linked!';
-      $('charPass').value = '';
-      refreshSlots();
-    } else {
-      $('linkError').textContent = r.error || 'Failed to link character.';
-    }
-  });
+  if (needLogin) {
+    // disable forms
+    if (linkForm) linkForm.querySelectorAll('input,button').forEach(x => x.disabled = true);
+    if (unlinkForm) unlinkForm.querySelectorAll('input,button').forEach(x => x.disabled = true);
+    toast('Please log in first.');
+    return;
+  }
 
-  // Unlink character
-  $('unlinkForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    $('unlinkError').textContent = '';
-    $('unlinkOk').textContent = '';
+  if (linkForm) {
+    linkForm.querySelectorAll('input,button').forEach(x => x.disabled = false);
+    linkForm.addEventListener('submit', handleLinkSubmit);
+  }
+  if (unlinkForm) {
+    unlinkForm.querySelectorAll('input,button').forEach(x => x.disabled = false);
+    unlinkForm.addEventListener('submit', handleUnlinkSubmit);
+  }
 
-    const idVal = $('unlinkId').value.trim();
-    const charId = parseInt(idVal, 10);
+  refreshSlots();
+}
 
-    if (!charId) {
-      $('unlinkError').textContent = 'Enter a valid character ID (number).';
-      return;
-    }
+/* ====== init ====== */
+document.addEventListener('DOMContentLoaded', () => {
+  // Optional: health check to hint config issues
+  api('/healthz').then(r => {
+    if (!r || !r.ok) toast('API unavailable.');
+  }).catch(() => toast('API unavailable.'));
 
-    const r = await api('/characters/unregister', {
-      method: 'POST',
-      body: JSON.stringify({ charId })
-    });
-
-    if (r && r.ok) {
-      $('unlinkOk').textContent = 'Character unlinked.';
-      $('unlinkId').value = '';
-      refreshSlots();
-    } else {
-      $('unlinkError').textContent = r.error || 'Failed to unlink character.';
-    }
-  });
+  checkAuthAndWireUI();
 });
