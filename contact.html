@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Blessed TK</title>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+<header class="site-header">…</header>
+<main class="section"><div class="container narrow">
+  <h2>Contact</h2>
+  <form id="contactForm">
+    <div class="form-field">
+      <label for="cEmail">Email</label>
+      <input id="cEmail" type="email" required placeholder="you@example.com">
+    </div>
+    <div class="form-field">
+      <label for="cMsg">Message</label>
+      <textarea id="cMsg" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn">Send</button>
+  </form>
+</div></main>
+<footer class="site-footer">…</footer>
+<script>
+  document.getElementById('contactForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    alert('Thanks! Contact endpoint coming soon.');
+  });
+</script>
+</body></html>
