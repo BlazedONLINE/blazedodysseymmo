@@ -1,42 +1,66 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blessed TK — Powerlist</title>
-<link rel="stylesheet" href="styles.css">
-</head><body>
-<header class="site-header"><div class="container nav-wrap">
-  <a class="brand" href="index.html"><img src="assets/images/logo.svg" alt="" width="28" height="28"><span>Blessed TK</span></a>
-  <nav class="nav"><ul class="nav-menu">
-    <li><a data-nav="home" href="index.html">Home</a></li>
-    <li><a data-nav="powerlist" href="powerlist.html">Powerlist</a></li>
-    <li><a data-nav="updates" href="updates.html">Updates</a></li>
-    <li><a data-nav="create" href="create-account.html">Create Account</a></li>
-    <li><a data-nav="contact" href="contact.html">Contact</a></li>
-    <li><a data-nav="account" href="account.html">Account</a></li>
-  </ul></nav>
-</div></header>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Powerlist — Blessed TK</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html" aria-label="Blessed TK home">
+      <img src="assets/images/logo.svg" alt="" width="28" height="28" />
+      <span>Blessed TK</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="powerlist.html" aria-current="page">Powerlist</a></li>
+        <li><a href="updates.html">Updates</a></li>
+        <li><a href="create.html">Create Account</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-<main class="section">
+<main class="section" id="powerlist">
   <div class="container">
-    <h2>Top 100 Powerlist</h2>
-    <div class="controls">
-      <input id="powerSearch" type="search" placeholder="Search by player or path…" aria-label="Search Powerlist" />
-      <button class="btn ghost sm" id="refreshPower">Refresh</button>
+    <div class="section-head">
+      <h2>Top 100 Powerlist</h2>
+      <div class="controls">
+        <label for="powerSearch" class="sr-only">Search Powerlist</label>
+        <input id="powerSearch" type="search" placeholder="Search by player or path…" aria-label="Search Powerlist" />
+        <button class="btn ghost sm" id="refreshPower">Refresh</button>
+      </div>
     </div>
     <div class="table-wrap">
       <table class="data-table" id="powerTable">
-        <thead><tr><th>Rank</th><th>Player</th><th>Path</th><th>Power</th></tr></thead>
+        <caption class="muted sm">Ranked by power. Data updates from the Blessed TK API.</caption>
+        <thead>
+          <tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Path</th><th scope="col">Power</th></tr>
+        </thead>
         <tbody id="powerBody"></tbody>
       </table>
     </div>
   </div>
 </main>
 
-<footer class="site-footer"><div class="container"><p class="footnote">© 2025 Blessed TK.</p></div></footer>
-<div id="toast" class="toast" hidden></div>
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <nav class="footer-nav">
+      <a href="#" target="_blank" id="githubLink" rel="noopener">GitHub</a>
+      <a href="#" id="termsLink">Terms</a>
+      <a href="#" id="privacyLink">Privacy</a>
+      <a href="#" id="discordLink" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</footer>
 
 <script src="config.js"></script>
 <script src="app.js"></script>
-<script>
-  (function(){ const link = document.querySelector('a[data-nav="powerlist"]'); if(link) link.classList.add('active');})();
-</script>
-</body></html>
+</body>
+</html>
