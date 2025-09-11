@@ -1,115 +1,113 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blessed TK — Home</title>
-  <meta name="description" content="Blessed TK — a modern 2D pixel-art MMO. Create your hero, join the community, watch the trailer, and see the Top 100 Powerlist." />
-  <meta property="og:title" content="Blessed TK — Official Site" />
-  <meta property="og:description" content="Watch the trailer, join the community, and check the Top 100 Powerlist." />
-  <meta property="og:image" content="assets/images/og-preview.png" />
-  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap"></noscript>
-  <link rel="stylesheet" href="styles.css" />
+<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blessed TK — Official Site</title>
+<meta name="description" content="Blessed TK — a modern 2D pixel-art MMO. Create your hero, join the community, watch the trailer." />
+<meta property="og:title" content="Blessed TK — Official Site" />
+<meta property="og:description" content="Watch the trailer, join the community, and check the Top 100 Powerlist." />
+<meta property="og:image" content="assets/images/og-preview.png" />
+<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap"></noscript>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- HEADER -->
-  <header class="site-header" role="banner">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html" aria-label="Blessed TK home">
-        <img src="assets/images/logo.svg" alt="" width="28" height="28" />
-        <span>Blessed TK</span>
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
-        <ul class="nav-menu" id="navMenu">
-          <li><a data-nav="home" class="active" href="index.html">Home</a></li>
-          <li><a data-nav="powerlist" href="powerlist.html">Powerlist</a></li>
-          <li><a data-nav="updates" href="updates.html">Updates</a></li>
-          <li><a data-nav="create" href="create-account.html">Create Account</a></li>
-          <li><a data-nav="account" href="account.html">Account</a></li>
-          <li><a data-nav="contact" href="contact.html">Contact</a></li>
+<header class="site-header" role="banner">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html" aria-label="Blessed TK home">
+      <img src="assets/images/logo.svg" alt="" width="28" height="28" />
+      <span>Blessed TK</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="powerlist.html">Powerlist</a></li>
+        <li><a href="updates.html">Updates</a></li>
+        <li><a href="create.html">Create Account</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="section hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h1><span class="ft">Blessed TK</span> <span class="badge">ALPHA</span></h1>
+        <p class="tagline">A modern 2D pixel-art MMO — fast, social, and skillful.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="create.html">Create Account</a>
+          <button class="btn ghost" data-open="trailerModal">Watch Trailer</button>
+          <a class="btn discord" id="discordBtn" target="_blank" rel="noopener">Join the Discord</a>
+        </div>
+      </div>
+      <div class="hero-media card">
+        <img src="assets/images/hero-art.svg" alt="Blessed TK world — pixel-art teaser" loading="lazy" />
+        <button class="btn overlay-play" data-open="trailerModal" aria-label="Play trailer">►</button>
+      </div>
+    </div>
+    <div class="bg-tint"></div>
+  </section>
+
+  <!-- WARRIOR CEO FEATURE -->
+  <section class="section alt" id="warriorceo">
+    <div class="container feature-split">
+      <div class="card feature-copy">
+        <h2>“Warrior CEO” Spotlight</h2>
+        <p>A seasonal honor for the most dedicated warrior who leads by example — strategy, stamina, and service to the realm.</p>
+        <ul class="checklist">
+          <li>Earned through peak performance & community impact</li>
+          <li>Displayed on the Powerlist and in-game honors board</li>
+          <li>Rotates each season — keep climbing!</li>
         </ul>
-      </nav>
+      </div>
+      <div class="card feature-media">
+        <img src="assets/images/warrior-spotlight.svg" alt="Stylized trophy and sword illustration" loading="lazy" />
+      </div>
     </div>
-  </header>
+  </section>
+</main>
 
-  <main id="main">
-    <!-- HERO -->
-    <section class="section hero">
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <h1><span class="ft">Blessed TK</span> <span class="badge">ALPHA</span></h1>
-          <p class="tagline">A modern 2D pixel-art MMO — fast, social, and skillful.</p>
-          <div class="cta-row">
-            <a class="btn primary" href="create-account.html">Create Account</a>
-            <a class="btn ghost" href="#trailer">Watch Trailer</a>
-            <a class="btn discord" href="#" id="discordBtn" target="_blank" rel="noopener">Join the Discord</a>
-          </div>
-        </div>
-        <div class="hero-media card" id="trailer">
-          <div class="video-wrap">
-            <iframe id="trailerFrame" title="Blessed TK Trailer" allow="autoplay; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          </div>
-        </div>
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <nav class="footer-nav">
+      <a href="#" target="_blank" id="githubLink" rel="noopener">GitHub</a>
+      <a href="#" id="termsLink">Terms</a>
+      <a href="#" id="privacyLink">Privacy</a>
+      <a href="#" id="discordLink" target="_blank" rel="noopener">Discord</a>
+    </nav>
+    <p class="footnote">© 2025 Blessed TK. ALPHA build. All features subject to change.</p>
+  </div>
+</footer>
+
+<!-- Trailer Modal -->
+<div class="modal" id="trailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="trailerTitle">
+  <div class="modal-backdrop" data-close="trailerModal"></div>
+  <div class="modal-dialog" role="document">
+    <header class="modal-header">
+      <h3 id="trailerTitle">Blessed TK — Trailer</h3>
+      <button class="close" aria-label="Close" data-close="trailerModal">×</button>
+    </header>
+    <div class="modal-body">
+      <div class="video-wrap">
+        <iframe id="trailerFrame" title="Blessed TK Trailer" allow="autoplay; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
-      <div class="bg-tint"></div>
-    </section>
-
-    <!-- WARRIOR CEO FEATURE -->
-    <section class="section alt" id="warriorceo">
-      <div class="container feature-split">
-        <div class="card feature-copy">
-          <h2>“Warrior CEO” Spotlight</h2>
-          <p>A seasonal honor for the most dedicated warrior who leads by example — strategy, stamina, and service to the realm.</p>
-          <ul class="checklist">
-            <li>Earned through peak performance & community impact</li>
-            <li>Displayed on the Powerlist and in-game honors board</li>
-            <li>Rotates each season — keep climbing!</li>
-          </ul>
-        </div>
-        <div class="card feature-media">
-          <img src="assets/images/warrior-spotlight.svg" alt="Stylized trophy and sword illustration" loading="lazy" />
-        </div>
-      </div>
-    </section>
-
-    <!-- LATEST UPDATES (preview from updates.json) -->
-    <section class="section" id="latest-updates">
-      <div class="container">
-        <div class="section-head">
-          <h2>Latest Updates</h2>
-          <a class="btn ghost sm" href="updates.html" aria-label="See all updates">See all</a>
-        </div>
-        <div id="updatesPreview" class="updates-list" aria-live="polite">
-          <!-- populated by home.js from updates.json -->
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="container">
-      <nav class="footer-nav">
-        <a href="#" target="_blank" id="githubLink" rel="noopener">GitHub</a>
-        <a href="#" id="termsLink">Terms</a>
-        <a href="#" id="privacyLink">Privacy</a>
-        <a href="#" id="discordLink" target="_blank" rel="noopener">Discord</a>
-      </nav>
-      <p class="footnote">© 2025 Blessed TK. ALPHA build. All features subject to change.</p>
     </div>
-  </footer>
+  </div>
+</div>
 
-  <!-- Toast -->
-  <div id="toast" role="status" aria-live="polite" class="toast" hidden></div>
+<div id="toast" role="status" aria-live="polite" class="toast" hidden></div>
 
-  <!-- Scripts -->
-  <script src="config.js"></script>
-  <script src="home.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
