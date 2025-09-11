@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blessed TK — Official Site</title>
-  <meta name="description" content="Blessed TK — a modern 2D pixel‑art MMO. Create your hero, join the community, watch the trailer, and see the Top 100 Powerlist." />
+  <title>Blessed TK — Home</title>
+  <meta name="description" content="Blessed TK — a modern 2D pixel-art MMO. Create your hero, join the community, watch the trailer, and see the Top 100 Powerlist." />
   <meta property="og:title" content="Blessed TK — Official Site" />
   <meta property="og:description" content="Watch the trailer, join the community, and check the Top 100 Powerlist." />
   <meta property="og:image" content="assets/images/og-preview.png" />
@@ -16,21 +16,23 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- HEADER -->
   <header class="site-header" role="banner">
     <div class="container nav-wrap">
-      <a class="brand" href="#home" aria-label="Blessed TK home">
+      <a class="brand" href="index.html" aria-label="Blessed TK home">
         <img src="assets/images/logo.svg" alt="" width="28" height="28" />
         <span>Blessed TK</span>
       </a>
       <nav class="nav" aria-label="Primary">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">☰</button>
         <ul class="nav-menu" id="navMenu">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#powerlist">Powerlist</a></li>
-          <li><a href="#updates">Updates</a></li>
-          <li><a href="#account">Create Account</a></li>
-          <li><a href="account.html">Account</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a data-nav="home" class="active" href="index.html">Home</a></li>
+          <li><a data-nav="powerlist" href="powerlist.html">Powerlist</a></li>
+          <li><a data-nav="updates" href="updates.html">Updates</a></li>
+          <li><a data-nav="create" href="create-account.html">Create Account</a></li>
+          <li><a data-nav="account" href="account.html">Account</a></li>
+          <li><a data-nav="contact" href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -38,20 +40,21 @@
 
   <main id="main">
     <!-- HERO -->
-    <section id="home" class="section hero">
+    <section class="section hero">
       <div class="container hero-inner">
         <div class="hero-copy">
           <h1><span class="ft">Blessed TK</span> <span class="badge">ALPHA</span></h1>
-          <p class="tagline">A modern 2D pixel‑art MMO — fast, social, and skillful.</p>
+          <p class="tagline">A modern 2D pixel-art MMO — fast, social, and skillful.</p>
           <div class="cta-row">
-            <a class="btn primary" href="#account">Create Account</a>
-            <button class="btn ghost" data-open="trailerModal">Watch Trailer</button>
+            <a class="btn primary" href="create-account.html">Create Account</a>
+            <a class="btn ghost" href="#trailer">Watch Trailer</a>
             <a class="btn discord" href="#" id="discordBtn" target="_blank" rel="noopener">Join the Discord</a>
           </div>
         </div>
-        <div class="hero-media card">
-          <img src="assets/images/hero-art.svg" alt="Blessed TK world — pixel‑art teaser" loading="lazy" />
-          <button class="btn overlay-play" data-open="trailerModal" aria-label="Play trailer">►</button>
+        <div class="hero-media card" id="trailer">
+          <div class="video-wrap">
+            <iframe id="trailerFrame" title="Blessed TK Trailer" allow="autoplay; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
         </div>
       </div>
       <div class="bg-tint"></div>
@@ -65,7 +68,7 @@
           <p>A seasonal honor for the most dedicated warrior who leads by example — strategy, stamina, and service to the realm.</p>
           <ul class="checklist">
             <li>Earned through peak performance & community impact</li>
-            <li>Displayed on the Powerlist and in‑game honors board</li>
+            <li>Displayed on the Powerlist and in-game honors board</li>
             <li>Rotates each season — keep climbing!</li>
           </ul>
         </div>
@@ -75,78 +78,21 @@
       </div>
     </section>
 
-    <!-- POWERLIST -->
-    <section id="powerlist" class="section">
+    <!-- LATEST UPDATES (preview from updates.json) -->
+    <section class="section" id="latest-updates">
       <div class="container">
         <div class="section-head">
-          <h2>Top 100 Powerlist</h2>
-          <div class="controls">
-            <input id="powerSearch" type="search" placeholder="Search by player or path…" aria-label="Search Powerlist" />
-            <button class="btn ghost sm" id="refreshPower">Refresh</button>
-          </div>
+          <h2>Latest Updates</h2>
+          <a class="btn ghost sm" href="updates.html" aria-label="See all updates">See all</a>
         </div>
-        <div class="table-wrap">
-          <table class="data-table" id="powerTable">
-            <caption class="muted sm">Ranked by power. Data updates from the Blessed TK API.</caption>
-            <thead>
-              <tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Path</th><th scope="col">Power</th></tr>
-            </thead>
-            <tbody id="powerBody">
-              <!-- populated by app.js -->
-            </tbody>
-          </table>
+        <div id="updatesPreview" class="updates-list" aria-live="polite">
+          <!-- populated by home.js from updates.json -->
         </div>
-        <p class="muted sm">API endpoint is configurable in <code>config.js</code>. If unavailable, a local sample is shown.</p>
-      </div>
-    </section>
-
-    <!-- UPDATES -->
-    <section id="updates" class="section alt">
-      <div class="container">
-        <h2>Updates</h2>
-        <div class="news-tile">No release date yet — follow development updates here.</div>
-        <div id="updatesList" class="updates-list" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <!-- CREATE ACCOUNT -->
-    <section id="account" class="section">
-      <div class="container narrow">
-        <h2>Create Account</h2>
-        <form id="signupForm" novalidate>
-          <label for="username">Username</label>
-          <input id="username" name="username" type="text" inputmode="text" autocomplete="username" required aria-describedby="usernameError" placeholder="3–15 letters, numbers, underscore">
-          <div class="error" id="usernameError" role="alert" aria-live="polite"></div>
-
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required aria-describedby="emailError" placeholder="you@example.com">
-          <div class="error" id="emailError" role="alert" aria-live="polite"></div>
-
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" autocomplete="new-password" required aria-describedby="passwordError" placeholder="Min 6 characters">
-          <div class="error" id="passwordError" role="alert" aria-live="polite"></div>
-
-          <label for="confirm">Confirm Password</label>
-          <input id="confirm" name="confirm" type="password" autocomplete="new-password" required aria-describedby="confirmError">
-          <div class="error" id="confirmError" role="alert" aria-live="polite"></div>
-
-          <button type="submit" id="signupBtn" disabled>Create Account</button>
-          <p class="muted sm tip" id="apiTip" hidden>Signup API not configured.</p>
-        </form>
-        <p class="muted sm">After creating your account, register your character name in‑game. Registration is required by level 15 to keep earning experience.</p>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="section alt">
-      <div class="container narrow">
-        <h2>Contact</h2>
-        <p>Contact form coming soon.</p>
-        <form><input type="text" placeholder="Your message" disabled><button disabled>Send</button></form>
       </div>
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <nav class="footer-nav">
@@ -159,28 +105,11 @@
     </div>
   </footer>
 
-  <!-- Trailer Modal -->
-  <div class="modal" id="trailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="trailerTitle">
-    <div class="modal-backdrop" data-close="trailerModal"></div>
-    <div class="modal-dialog" role="document">
-      <header class="modal-header">
-        <h3 id="trailerTitle">Blessed TK — Trailer</h3>
-        <button class="close" aria-label="Close" data-close="trailerModal">×</button>
-      </header>
-      <div class="modal-body">
-        <div class="video-wrap">
-          <iframe id="trailerFrame" title="Blessed TK Trailer" allow="autoplay; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Toast -->
   <div id="toast" role="status" aria-live="polite" class="toast" hidden></div>
 
+  <!-- Scripts -->
   <script src="config.js"></script>
-  <script src="login.js"></script>
-  <script src="characters.js"></script>
-  <script src="app.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>
