@@ -1,189 +1,116 @@
-(function () {
-  const API = window.API_BASE;
-  const TOKEN_KEY = window.BTK_TOKEN_KEY || "btk_token";
-  const EMAIL_KEY = window.BTK_EMAIL_KEY || "btk_email";
+(() => {
+  const API = (window.BTK_CONFIG||{}).API_BASE_URL || "";
+  const form = document.getElementById('loginForm');
+  const email = document.getElementById('loginEmail');
+  const password = document.getElementById('loginPassword');
+  const loginError = document.getElementById('loginError');
+  const charList = document.getElementById('charList');
+  const linkForm = document.getElementById('linkForm');
+  const linkError = document.getElementById('linkError');
 
-  // Elements
-  const authGate = document.getElementById("authGate");
-  const accountPanel = document.getElementById("accountPanel");
-  const loginForm = document.getElementById("loginForm");
-  const loginEmail = document.getElementById("loginEmail");
-  const loginPass = document.getElementById("loginPass");
-  const loginMsg = document.getElementById("loginMsg");
-  const logoutBtn = document.getElementById("logoutBtn");
-  const linkForm = document.getElementById("linkForm");
-  const charName = document.getElementById("charName");
-  const charPass = document.getElementById("charPass");
-  const linkMsg = document.getElementById("linkMsg");
-  const charGrid = document.getElementById("charGrid");
-  const toast = document.getElementById("toast");
+  function setToken(t){ localStorage.setItem('btk_token', t); }
+  function getToken(){ return localStorage.getItem('btk_token') || ""; }
 
-  function show(el) { el && el.removeAttribute("hidden"); }
-  function hide(el) { el && el.setAttribute("hidden", ""); }
-  function token() { return localStorage.getItem(TOKEN_KEY) || ""; }
-
-  function setToast(msg) {
-    if (!toast) return;
-    toast.textContent = msg || "";
-    if (!msg) { toast.hidden = true; return; }
-    toast.hidden = false;
-    setTimeout(() => (toast.hidden = true), 2500);
+  async function api(url, opts={}) {
+    const r = await fetch(url, opts);
+    const ct = r.headers.get('content-type')||'';
+    const body = ct.includes('json') ? await r.json() : await r.text();
+    return { ok: r.ok, data: body };
   }
 
-  async function api(path, opts = {}) {
-    const headers = Object.assign(
-      { "Content-Type": "application/json" },
-      opts.headers || {}
-    );
-    if (!("Authorization" in headers) && token()) {
-      headers.Authorization = `Bearer ${token()}`;
-    }
-    const res = await fetch(`${API}${path}`, Object.assign({}, opts, { headers }));
-    // Handle 401 cleanly
-    if (res.status === 401) {
-      localStorage.removeItem(TOKEN_KEY);
-      renderGate();
-    }
-    let data;
-    try { data = await res.json(); } catch { data = { ok: false, error: "Bad JSON" }; }
-    return data;
-  }
-
-  // ----------------------
-  // Auth
-  // ----------------------
-  async function handleLogin(ev) {
-    ev.preventDefault();
-    loginMsg.textContent = "";
-
-    const email = (loginEmail.value || "").trim().toLowerCase();
-    const pass = loginPass.value || "";
-    if (!email || !pass) { loginMsg.textContent = "Email and password required."; return; }
-
-    const r = await api("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password: pass }),
-      headers: {} // api() adds JSON + Authorization as needed
-    });
-
-    if (!r.ok || !r.token) {
-      loginMsg.textContent = r.error || "Login failed.";
-      return;
-    }
-    localStorage.setItem(TOKEN_KEY, r.token);
-    localStorage.setItem(EMAIL_KEY, email);
-    loginForm.reset();
-    await renderPanel();
-  }
-
-  function handleLogout() {
-    localStorage.removeItem(TOKEN_KEY);
-    renderGate();
-  }
-
-  // ----------------------
-  // Characters
-  // ----------------------
-  function slotCard(slotIndex, detail) {
-    const i = slotIndex + 1;
-    if (!detail) {
-      return `
-        <div class="card slot empty">
-          <div class="slot-head">Slot ${i}</div>
-          <div class="muted">Empty</div>
-        </div>`;
-    }
-    const { id, name, level, pathName, gmLevel } = detail;
-    const gm = gmLevel && gmLevel > 0 ? `<span class="badge">GM ${gmLevel}</span>` : "";
-    return `
-      <div class="card slot">
-        <div class="slot-head">Slot ${i} ${gm}</div>
-        <div class="slot-body">
-          <div class="slot-title">${name} <span class="muted">#${id}</span></div>
-          <div class="slot-meta">Level ${level} • ${pathName}</div>
-        </div>
-      </div>`;
-  }
-
-  async function renderSlots() {
-    // Prefer rich details; if route is missing, fall back to basic ids
-    let details = await api("/characters/details");
-    if (!details.ok) {
-      // Fallback to /characters and map
-      const base = await api("/characters");
-      if (!base.ok) throw new Error(base.error || "Failed to load slots");
-      const ids = base.slots || [0,0,0,0,0,0];
-      const filled = await Promise.all(ids.map(async (id) => {
-        if (!id) return null;
-        const d = await api(`/characters/lookup?id=${encodeURIComponent(id)}`);
-        return d.ok ? d : null;
-      }));
-      charGrid.innerHTML = filled.map((d, idx) => slotCard(idx, d && {
-        id: d.id, name: d.name, level: d.level, pathName: d.pathName, gmLevel: d.gmLevel
-      })).join("");
-      return;
-    }
-
-    // details.ok
-    const slots = details.slots || [null, null, null, null, null, null];
-    charGrid.innerHTML = slots.map((d, idx) => {
-      return slotCard(idx, d && {
-        id: d.id, name: d.name, level: d.level, pathName: d.pathName, gmLevel: d.gmLevel
-      });
-    }).join("");
-  }
-
-  async function handleLink(ev) {
-    ev.preventDefault();
-    linkMsg.textContent = "";
-    const name = (charName.value || "").trim();
-    const pass = charPass.value || "";
-    if (!name || !pass) { linkMsg.textContent = "Both fields required."; return; }
-
-    const r = await api("/characters/register", {
-      method: "POST",
-      body: JSON.stringify({ name, password: pass })
-    });
-
-    if (!r.ok) {
-      linkMsg.textContent = r.error || "Link failed.";
-      return;
-    }
-    setToast("Character linked!");
-    linkForm.reset();
-    await renderSlots();
-  }
-
-  // ----------------------
-  // Render gates/panel
-  // ----------------------
-  async function renderPanel() {
-    hide(authGate);
-    show(accountPanel);
+  async function login() {
+    loginError.textContent = "";
     try {
-      await renderSlots();
+      const res = await api(`${API}/auth/login`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email: email.value.trim(), password: password.value })
+      });
+      if (!res.ok || !res.data?.ok || !res.data?.token) {
+        throw new Error(res.data?.error || 'Invalid credentials');
+      }
+      setToken(res.data.token);
+      await refreshCharacters();
+    } catch(e) { loginError.textContent = e.message || 'Login failed'; }
+  }
+
+  async function getSlots() {
+    const token = getToken();
+    if (!token) return null;
+    const res = await api(`${API}/characters`, { headers: { Authorization: `Bearer ${token}` } });
+    return res.data;
+  }
+
+  // Optional detail lookup (works if backend has /characters/lookup)
+  async function lookupChar(id) {
+    if (!id) return null;
+    try {
+      const res = await api(`${API}/characters/lookup?id=${encodeURIComponent(id)}`);
+      return res.ok ? res.data : null;
+    } catch { return null; }
+  }
+
+  function pathNameFromId(id) {
+    const map = {
+      1:'Rogue', 2:'Mage', 3:'Priest', 4:'Poet', 5:'Warrior', 6:'GM'
+    };
+    return map[id] || `Path ${id ?? ''}`.trim();
+  }
+
+  async function refreshCharacters() {
+    const token = getToken();
+    if (!token) { charList.textContent = 'Log in to view characters.'; return; }
+    charList.textContent = 'Loading…';
+    try {
+      const data = await getSlots();
+      if (!data?.ok) throw new Error(data?.error || 'Failed to load characters');
+
+      const ids = (data.slots || []).filter(x => Number(x) > 0);
+      if (!ids.length) { charList.innerHTML = '<div class="muted">No characters linked yet.</div>'; return; }
+
+      // Try to enrich with details; gracefully degrade
+      const details = await Promise.all(ids.map(id => lookupChar(id).catch(()=>null)));
+      const items = ids.map((id, i) => {
+        const d = details[i];
+        const name = d?.name ?? `#${id}`;
+        const level = d?.level ?? '—';
+        const path = d?.pathName ?? pathNameFromId(d?.pathId);
+        return `<div class="char-card"><div><strong>${name}</strong></div><div class="muted">Level ${level} — ${path}</div></div>`;
+      });
+
+      charList.innerHTML = items.join('');
     } catch (e) {
-      console.error(e);
-      charGrid.innerHTML = `<div class="error">Failed to load characters.</div>`;
+      charList.innerHTML = '<div class="error">Failed to load characters.</div>';
     }
   }
 
-  function renderGate() {
-    show(authGate);
-    hide(accountPanel);
+  async function linkCharacter(e) {
+    e.preventDefault();
+    linkError.textContent = '';
+    const token = getToken();
+    if (!token) { linkError.textContent = 'Please log in first.'; return; }
+    const name = (document.getElementById('charName').value||'').trim();
+    const pass = document.getElementById('charPassword').value||'';
+    if (!name || !pass) { linkError.textContent = 'Enter name and password.'; return; }
+
+    try {
+      const res = await api(`${API}/characters/register`, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ name, password: pass })
+      });
+      if (!res.data?.ok) throw new Error(res.data?.error || 'Link failed');
+      await refreshCharacters();
+      linkForm.reset();
+    } catch (e) {
+      linkError.textContent = e.message || 'Link failed';
+    }
   }
 
-  // ----------------------
-  // Init
-  // ----------------------
-  document.addEventListener("DOMContentLoaded", () => {
-    // Wire up events
-    loginForm && loginForm.addEventListener("submit", handleLogin);
-    logoutBtn && logoutBtn.addEventListener("click", handleLogout);
-    linkForm && linkForm.addEventListener("submit", handleLink);
+  // Wire up events
+  form?.addEventListener('submit', (e) => { e.preventDefault(); login(); });
+  linkForm?.addEventListener('submit', linkCharacter);
 
-    // Decide what to show
-    if (token()) renderPanel();
-    else renderGate();
-  });
+  // Auto-load if token exists
+  if (getToken()) refreshCharacters();
 })();
