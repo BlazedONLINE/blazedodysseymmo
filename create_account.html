@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Account — Blessed TK</title>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+<header class="site-header">…(same nav as above)…</header>
+
+<main class="section">
+  <div class="container narrow">
+    <h2>Create Account</h2>
+
+    <form id="signupForm" novalidate>
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+        <div class="error" id="emailError" aria-live="polite"></div>
+      </div>
+
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" required placeholder="Min 6 characters">
+        <div class="error" id="passwordError" aria-live="polite"></div>
+      </div>
+
+      <div class="form-field">
+        <label for="confirm">Confirm Password</label>
+        <input id="confirm" name="confirm" type="password" autocomplete="new-password" required>
+        <div class="error" id="confirmError" aria-live="polite"></div>
+      </div>
+
+      <button type="submit" id="signupBtn" disabled>Create Account</button>
+      <p class="muted sm tip" id="apiTip" hidden>Signup API not configured.</p>
+    </form>
+
+    <p class="muted sm">After signup, you can link in-game characters to your account.</p>
+  </div>
+</main>
+
+<footer class="site-footer">…</footer>
+<div id="toast" class="toast" hidden></div>
+
+<script src="config.js"></script>
+<script>
+  const API = window.BTK_CONFIG.API_BASE_URL;
+
+  // enable button only when valid + matching
+  const email = document.getElementById('email');
+  const pw = document.getElementById('password');
+  const cf = document.getElementById('confirm');
+  const btn = document.getElementById('signupBtn');
+
+  function validate() {
+    const ok = email.value && pw.value.length >= 6 && pw.value === cf.value;
+    btn.disabled = !ok;
+  }
+  [email, pw, cf].forEach(i => i.addEventListener('input', validate));
+  validate();
+
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const r = await fetch(`${API}/auth/signup`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email: email.value.trim(), password: pw.value })
+    });
+    const j = await r.json().catch(()=>({ok:false,error:'Network'}));
+    if (j.ok) {
+      alert('Account created! Please log in.');
+      location.href = 'account.html';
+    } else {
+      alert(j.error || 'Signup failed');
+    }
+  });
+</script>
+</body></html>
